@@ -4,10 +4,13 @@ import Profile from "./routes/profile"
 import Layout from "./components/layout";
 import Login from "./routes/login";
 import CreateAccount from "./routes/create-account";
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, styled } from "styled-components";
 import reset from "styled-reset";
 import { useState, useEffect } from "react";
 import LoadingScreen from "./components/loading-screen";
+import { auth } from "./firebase";
+
+
 
 const router = createBrowserRouter([
   {
@@ -55,19 +58,29 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
+const Wrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+`;
+
 function App() {
   const [isLoading, setIsLoading]= useState(true);
   const init = async() => {
     // 파이어베이스를 기다리는 동안     
-      setIsLoading(false);
+
+    await auth.authStateReady();
+    setIsLoading(false);
   }
   useEffect(()=> {
     init();
   }, []);
 
   return <>
-    <GlobalStyles />
-    {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}   
+    <Wrapper>
+      <GlobalStyles />
+      {isLoading ? <LoadingScreen /> : <RouterProvider router={router} />}   
+    </Wrapper>
   </>
   
 }
