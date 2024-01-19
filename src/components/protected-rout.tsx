@@ -8,9 +8,9 @@ export default function ProtectedRout( {
 } ) {
 
     const user = auth.currentUser;
-    console.log(user);
+
     if(user === null) {
-        return <Navigate to="/create-account" />;
+        return <Navigate to="/login" />;
     }
     return children
 }
